@@ -1,12 +1,11 @@
 import '../style/index.css'
-import { Provider } from "react-redux";
-
+import { StoreProvider } from 'easy-peasy';
 import store from "../store";
 
 export default function MyApp({ Component, pageProps }) {
     return (
-        <Provider store={store}>
+        <StoreProvider store={store}>
             <Component {...pageProps} />
-        </Provider>
+        </StoreProvider>
     )
 }

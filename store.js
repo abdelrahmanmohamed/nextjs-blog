@@ -1,19 +1,34 @@
-import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import thunk from "redux-thunk";
+import { createStore } from 'easy-peasy';
+import { action, thunk } from 'easy-peasy';
 
-import rootReducer from "./reducers";
+const storeModel = {
+    //State
+    users: [],
+    //Thunks
+    fetchUsers: thunk((actions) => {
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then(res => res.json())
+            .then(users => actions.addUsersToState(users))
+    }),
+    addUser: thunk((actions, user) => {
+        fetch("https://jsonplaceholder.typicode.com/users", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(user)
+        })
+            .then(res => res.json())
+            .then(user => actions.addUsersToState([user]))
+    }),
+    //Actions
+    addUsersToState: action((state, users) => {
+        state.users = [...state.users, ...users];
+    }),
 
-const initialState = {};
-
-const middlewares = [thunk];
+}
 
 //Create Store
 export default createStore(
-    rootReducer,
-    initialState,
-    composeWithDevTools(
-        applyMiddleware(...middlewares)
-        //window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
+    storeModel
 );

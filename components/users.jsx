@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
-//2.
-import { connect, useDispatch } from "react-redux";
+import { useStoreState, useStoreActions } from 'easy-peasy';
 
-//1.
-import { fetchUsers } from "../actions/userActions";
 
-const Users = ({ fetchUsers, users }) => {
-    const dispatch = useDispatch()
-    useEffect(() => { dispatch(fetchUsers) }, [])
+const Users = () => {
+    const users = useStoreState(state => state.users);
+    const fetchUsers  = useStoreActions(actions => actions.fetchUsers);
+    useEffect(() => { fetchUsers() }, [])
     return (
         <React.Fragment>
             <h1>Users</h1>
@@ -21,13 +19,4 @@ const Users = ({ fetchUsers, users }) => {
     );
 }
 
-//4.
-const mapStateToProps = (state) => {
-    return {
-        users: state.users.items, //Get items from usersReducer
-        user: state.users.item
-    };
-}
-
-//3.
-export default connect(mapStateToProps, { fetchUsers })(Users);
+export default Users;

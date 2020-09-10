@@ -1,15 +1,14 @@
 import { connect } from "react-redux";
-
-import { addUser } from "../actions/userActions";
+import { useStoreActions } from 'easy-peasy';
 import { useForm } from "react-hook-form";
 
 
-function UserForm({addUser}) {
-
+function UserForm() {
     const { register, handleSubmit, watch, errors } = useForm();
-    const onSubmit = data => addUser(data); //this.props.addUser(data)
+    const addUser = useStoreActions(actions => actions.addUser);
+    const onSubmit = data => addUser(data);
 
-    console.log(watch("name")); 
+    console.log(watch("name"));
 
     return (
         <>
@@ -23,4 +22,4 @@ function UserForm({addUser}) {
     );
 }
 
-    export default connect(null, { addUser })(UserForm);
+export default UserForm;
